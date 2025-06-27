@@ -6,11 +6,11 @@ using UnityEngine;
 public class GameTile : MonoBehaviour
 {
     [SerializeField]
-    Transform arrow = default;
+    public Transform arrow = default;
 
     GameTile north, east, south, west, nextOnPath;
 
-    int distance;
+    public int distance;
 
     public bool HasPath => distance != int.MaxValue;
 
@@ -20,7 +20,8 @@ public class GameTile : MonoBehaviour
         northRotation = Quaternion.Euler(90f, 0f, 0f),
         eastRotation = Quaternion.Euler(90f, 90f, 0f),
         southRotation = Quaternion.Euler(90f, 180f, 0f),
-        westRotation = Quaternion.Euler(90f, 270f, 0f);
+        westRotation = Quaternion.Euler(90f, 270f, 0f),
+        myRotation = Quaternion.Euler(45f, 45f, 45f);
 
     GameTileContent content;
 
@@ -77,8 +78,9 @@ public class GameTile : MonoBehaviour
             return null;
         }
         neighbour.distance = distance + 1;
+        //Debug.Log(HasPath);
         neighbour.nextOnPath = this;
-        return neighbour;
+        return neighbour.Content.Type != GameTileContentType.Wall ? neighbour : null; ;
     }
 
     public GameTile GrowPathNorth() => GrowPathTo(north);

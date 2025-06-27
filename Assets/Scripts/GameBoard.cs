@@ -54,7 +54,7 @@ public class GameBoard : MonoBehaviour {
                 tile.Content = contentFactory.Get(GameTileContentType.Empty);
             }
         }
-        ToggleDestination(tiles[tiles.Length / 2]);
+        //ToggleDestination(tiles[tiles.Length / 2]);
         //FindPaths();
     }
 
@@ -103,14 +103,24 @@ public class GameBoard : MonoBehaviour {
                     searchFrontier.Enqueue(tile.GrowPathNorth());
                 }
             }
-
-            foreach (GameTile t in tiles)
-            {
-                //Debug.Log(t);
-                t.ShowPath();
-            }
-
         }
+
+        foreach (GameTile t in tiles)
+        {
+            if (!t.HasPath)
+            {
+                //t.arrow.localRotation= Quaternion.Euler(45f, 45f, 45f);
+                return false;
+            }
+        }
+
+        foreach (GameTile t in tiles)
+        {
+            //Debug.Log("Progress working");
+            t.ShowPath();
+        }
+
+
         return true;
     }
 
@@ -125,10 +135,28 @@ public class GameBoard : MonoBehaviour {
                 FindPaths();
             }
         }
-        else
+        else if (tile.Content.Type == GameTileContentType.Empty)
         {
             tile.Content = contentFactory.Get(GameTileContentType.Destination);
             FindPaths();
+        }
+    }
+
+    public void ToggleWall(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Wall)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.Wall);
+            if (!FindPaths())
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
         }
     }
 

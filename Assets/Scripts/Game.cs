@@ -28,7 +28,22 @@ public class Game : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            //Debug.Log("Handle");
             HandleTouch();
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            //Debug.Log("HandleAlter");
+            HandleAlternativeTouch();
+        }
+    }
+
+    void HandleAlternativeTouch()
+    {
+        GameTile tile = board.GetTile(TouchRay);
+        if (tile != null)
+        {
+            board.ToggleDestination(tile);
         }
     }
 
@@ -38,7 +53,8 @@ public class Game : MonoBehaviour
         if (tile != null)
         {
             //tile.Content = tileContentFactory.Get(GameTileContentType.Destination);
-            board.ToggleDestination(tile);
+            board.ToggleWall(tile);
         }
     }
+
 }
